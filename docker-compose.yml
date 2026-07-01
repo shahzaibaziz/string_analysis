@@ -1,0 +1,15 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: string_analysis-api
+    ports:
+      - "${PORT:-8000}:8000"
+    environment:
+      HOST: "0.0.0.0"
+      PORT: "8000"
+      RELOAD: "true"
+    restart: unless-stopped
+    volumes:
+      - ./app:/app/app:ro
