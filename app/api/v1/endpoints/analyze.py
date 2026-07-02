@@ -57,6 +57,7 @@ def _compute_value(text: str, operation: AnalysisOperation) -> int:
     responses={
         400: {"model": ErrorResponse, "description": "Invalid operations query parameter"},
         422: {"model": ErrorResponse, "description": "Request validation failed"},
+        500: {"model": ErrorResponse, "description": "Internal server error"},
     },
 )
 def analyze_text(

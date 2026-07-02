@@ -32,32 +32,23 @@ class AnalysisResultItem(BaseModel):
     value: int = Field(..., ge=0, description="The computed result for the operation")
 
 
-def _parse_operations_query(value: object) -> list[AnalysisOperation] | None:
-    if value is None:
+def _tokenize(raw_value: str) -> list[str]:
+    return [token.strip() for token in raw_value.split(",") if token.strip()]
+
+
+def _validate_token(token: str) -> AnalysisOperation:
+    if token not in ALLOWED_OPERATIONS:
+        raise InvalidAnalysisOperationError(token, ALLOWED_OPERATIONS)
+    return AnalysisOperation(token)
+
+
+def _parse_operations_query(value: str | None) -> list[AnalysisOperation] | None:
+    if value is None or not value.strip():
         return None
 
-    if isinstance(value, list):
-        if not value:
-            return None
-        if all(isinstance(item, AnalysisOperation) for item in value):
-            return list(dict.fromkeys(value))
-        value = ",".join(str(item) for item in value)
-
-    if not isinstance(value, str):
-        raise ValueError("operations must be a comma-separated list of operation names")
-
-    stripped = value.strip()
-    if not stripped:
-        return None
-
-    tokens = [token.strip() for token in stripped.split(",") if token.strip()]
+    tokens = _tokenize(value)
     if not tokens:
         return None
 
-    selected: list[AnalysisOperation] = []
-    for token in tokens:
-        if token not in ALLOWED_OPERATIONS:
-            raise InvalidAnalysisOperationError(token, ALLOWED_OPERATIONS)
-        selected.append(AnalysisOperation(token))
-
-    return list(dict.fromkeys(selected))
+    operations = [_validate_token(token) for token in tokens]
+    return list(dict.fromkeys(operations))

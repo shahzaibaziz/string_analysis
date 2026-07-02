@@ -10,6 +10,7 @@ services:
       HOST: "0.0.0.0"
       PORT: "8000"
       RELOAD: "false"
+      MAX_STRING_LENGTH: 400
       LOG_LEVEL: "INFO"
     restart: unless-stopped
     volumes:
