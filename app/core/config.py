@@ -12,6 +12,7 @@ class Settings(BaseSettings):
     RELOAD: bool = True
 
     MAX_STRING_LENGTH: int = 100
+    LOG_LEVEL: str = "INFO"
 
 
 settings = Settings()

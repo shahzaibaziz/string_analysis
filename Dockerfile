@@ -11,7 +11,13 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+RUN addgroup -S dev && adduser -S dev -G dev
+
 COPY app ./app
+
+RUN chown -R dev:dev /app
+
+USER dev
 
 EXPOSE 8000
 
