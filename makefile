@@ -25,9 +25,9 @@ clean: ## Remove dev Docker image and local cache artifacts
 format: build-dev ## Apply code formatting
 	$(DOCKER_RUN) ./scripts/format.sh
 
-check: format ## Verify formatting and run linter
+check: build-dev ## Verify formatting and run linter
 	$(DOCKER_RUN) ./scripts/format-check.sh
 	$(DOCKER_RUN) ./scripts/lint.sh
 
-test: check ## Run unit tests
+test: build-dev check ## Run unit tests
 	$(DOCKER_RUN) ./scripts/test.sh
